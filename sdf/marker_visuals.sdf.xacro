@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- A static model with one visual-only link whose visual carries the marker visuals plugin; the model itself shows
+     nothing and takes no part in physics. Arguments as in launch/marker_visuals.launch. -->
+<sdf version="1.6" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="model_name" default="marker_visuals"/>
+  <xacro:arg name="topic" default="markers"/>
+  <xacro:arg name="world_frame" default="map"/>
+  <xacro:arg name="visibility" default="gui"/>
+  <xacro:arg name="show_in_cameras" default=""/>
+  <xacro:arg name="timeout" default="2.0"/>
+  <xacro:arg name="namespaces" default=""/>
+  <model name="$(arg model_name)">
+    <static>true</static>
+    <link name="link">
+      <visual name="marker_visuals">
+        <geometry><box><size>0.001 0.001 0.001</size></box></geometry>
+        <transparency>1.0</transparency>
+        <cast_shadows>false</cast_shadows>
+        <plugin name="marker_visuals" filename="libgazebo_marker_visuals.so">
+          <topic>$(arg topic)</topic>
+          <world_frame>$(arg world_frame)</world_frame>
+          <visibility>$(arg visibility)</visibility>
+          <show_in_cameras>$(arg show_in_cameras)</show_in_cameras>
+          <timeout>$(arg timeout)</timeout>
+          <namespaces>$(arg namespaces)</namespaces>
+        </plugin>
+      </visual>
+    </link>
+  </model>
+</sdf>

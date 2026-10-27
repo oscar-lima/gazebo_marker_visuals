@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Draws a visualization_msgs/MarkerArray topic in a running Gazebo (cubes, spheres, cylinders; visuals only, no
+       physics): spawns a static model that carries the gazebo_marker_visuals plugin. Simulation only. -->
+  <arg name="name" doc="model name of the drawing in Gazebo, unique in the world"/>
+  <arg name="topic" doc="the MarkerArray topic, absolute"/>
+  <arg name="world_frame" default="map" doc="TF frame that coincides with Gazebo's world frame"/>
+  <arg name="visibility" default="gui" doc="gui: gzclient and the show_in_cameras sensors only, no other camera sensor sees the markers; all: every camera"/>
+  <arg name="show_in_cameras" default="" doc="space separated tokens of camera sensor names that draw gui markers too, e.g. an overview camera"/>
+  <arg name="timeout" default="2.0" doc="a marker without an update for this many seconds (ROS time) disappears; 0 = never"/>
+  <arg name="namespaces" default="" doc="space separated marker namespaces to draw; empty = all"/>
+  <param name="$(arg name)_sdf" command="xacro '$(find gazebo_marker_visuals)/sdf/marker_visuals.sdf.xacro'
+      model_name:=$(arg name) topic:=$(arg topic) world_frame:=$(arg world_frame) visibility:=$(arg visibility)
+      show_in_cameras:='$(arg show_in_cameras)' timeout:=$(arg timeout)
+      namespaces:='$(arg namespaces)'"/>
+  <node name="spawn_$(arg name)" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-sdf -param $(arg name)_sdf -model $(arg name)"/>
+</launch>
